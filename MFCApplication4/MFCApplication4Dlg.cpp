@@ -6,6 +6,14 @@
 #include "MFCApplication4.h"
 #include "MFCApplication4Dlg.h"
 #include "afxdialogex.h"
+#include<iostream>
+#include<stack>
+#include<string>
+#include<cctype>
+#include<cmath>
+
+using namespace std;
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -14,7 +22,7 @@
 
 // CMFCApplication4Dlg 对话框
 
-
+int CMFCApplication4Dlg::denghao1 = 0;
 
 CMFCApplication4Dlg::CMFCApplication4Dlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_MFCAPPLICATION4_DIALOG, pParent)
@@ -47,6 +55,12 @@ BEGIN_MESSAGE_MAP(CMFCApplication4Dlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON13, &CMFCApplication4Dlg::OnClickedButtonmin)
 	ON_BN_CLICKED(IDC_BUTTON14, &CMFCApplication4Dlg::OnClickedButtonmult)
 	ON_BN_CLICKED(IDC_BUTTON15, &CMFCApplication4Dlg::OnClickedButtondiv)
+//	ON_BN_CLICKED(IDC_BUTTON16, &CMFCApplication4Dlg::OnClickedButtonequal)
+	ON_BN_CLICKED(IDC_BUTTON17, &CMFCApplication4Dlg::OnClickedButtonkLeft)
+	ON_BN_CLICKED(IDC_BUTTON18, &CMFCApplication4Dlg::OnClickedButtonkRight)
+	ON_BN_CLICKED(IDC_BUTTON11, &CMFCApplication4Dlg::OnClickedButtondian)
+	ON_BN_CLICKED(IDC_BUTTON19, &CMFCApplication4Dlg::OnClickedButtonpower)
+	ON_BN_CLICKED(IDC_BUTTON16, &CMFCApplication4Dlg::OnClickedButtonequal)
 END_MESSAGE_MAP()
 
 
@@ -177,6 +191,12 @@ void CMFCApplication4Dlg::OnClickedButton10()
 }
 
 void CMFCApplication4Dlg::OnCmdRange(UINT uID) {
+	if (denghao1 == 1) {
+		UpdateData(TRUE);
+		m_EditResult = L"";
+		UpdateData(FALSE);
+		denghao1 = 0;
+	}
 	UpdateData(TRUE);
 	if (uID == IDC_BUTTON10)
 	{
@@ -229,3 +249,168 @@ void CMFCApplication4Dlg::OnClickedButtondiv()
 	m_EditResult += L"/";
 	UpdateData(FALSE);
 }
+
+
+//void CMFCApplication4Dlg::OnClickedButtonequal()
+//{
+//	// TODO: 在此添加控件通知处理程序代码
+//}
+
+
+void CMFCApplication4Dlg::OnClickedButtonkLeft()
+{
+	if (denghao1 == 1) {
+		UpdateData(TRUE);
+		m_EditResult = L"";
+		UpdateData(FALSE);
+		denghao1 = 0;
+	}
+	UpdateData(TRUE);
+	// TODO: 在此添加控件通知处理程序代码
+	m_EditResult += L"(";
+	UpdateData(FALSE);
+}
+
+
+void CMFCApplication4Dlg::OnClickedButtonkRight()
+{
+	UpdateData(TRUE);
+	// TODO: 在此添加控件通知处理程序代码
+	m_EditResult += L")";
+	UpdateData(FALSE);
+}
+
+
+void CMFCApplication4Dlg::OnClickedButtondian()
+{
+	UpdateData(TRUE);
+	// TODO: 在此添加控件通知处理程序代码
+	m_EditResult += L".";
+	UpdateData(FALSE);
+}
+
+
+void CMFCApplication4Dlg::OnClickedButtonpower()
+{
+	UpdateData(TRUE);
+	// TODO: 在此添加控件通知处理程序代码
+	m_EditResult += L"^";
+	UpdateData(FALSE);
+}
+
+
+
+
+void CMFCApplication4Dlg::OnClickedButtonequal()
+{
+	UpdateData(TRUE);
+	// TODO: 在此添加控件通知处理程序代码
+	bool i=isKuoHaoPiPei(m_EditResult);
+	if (i ==0)
+		m_EditResult = L"括号不匹配，表达式错误";
+	else {
+		string s = CT2A(m_EditResult);
+	}
+	UpdateData(FALSE);
+	denghao1 = 1;
+	
+	
+
+}
+
+bool CMFCApplication4Dlg::isKuoHaoPiPei(CString m_EditResult)
+// 定义一个空栈，读入字符至字符串尾。如果字符是“h”，则将其压入栈中。如果字符是“）”，
+//那么若栈为空，则return false;若栈不为空，则将栈顶元素弹出。当读到最后一个字符时，
+//如果栈尾空，则输出return false。
+{
+	stack<char> S;
+	if (!S.empty())
+		S.swap(stack<char>());
+	string s = CT2A(m_EditResult);
+	bool judge = 1;
+	int l = s.length();
+	int k = 0;//栈里是否有元素
+	for (int i = 0;i < l;i++) {
+		if (s[i] == '(') {
+			S.push(s[i]);
+		}
+		else if (s[i] == ')') {
+			if (S.empty()) {
+				judge = 0;
+			}
+			else {
+				S.pop();
+			}
+		}		
+	}
+	if ( !S.empty())
+			judge = 0;
+	return judge;
+}
+
+bool CMFCApplication4Dlg::centerValueLast(string & s)
+{
+	int i = 0, j = 0;
+	stack<char> S;
+	if (!S.empty())
+		S.swap(stack<char>());
+	int l = s.length();
+	for(i = 0,j=0;i < l;i++) {
+		if (s[i] >= '0'&&s[i] <= '9' || s[i] == '.') {
+			s[j] = s[i];
+			j++;
+		}
+		else if (isOperator(s[i])) {
+			if (S.empty())
+				S.push(s[i]);
+			else if (priority(S.top()) {
+
+			}
+		}
+	}
+	return false;
+}
+
+bool CMFCApplication4Dlg::isOperator(char a)
+{
+	if (a == '+' || a == '-' || a == '*' || a == '/')
+		return true;
+	else
+	return false;
+}
+
+int CMFCApplication4Dlg::priority(char op)
+{
+	switch (op)
+	{
+	case '(':
+		return 0;
+	case '+':
+	case '-':
+		return 1;
+	case '*':
+	case '/':
+		return 2;
+	default:
+		return -1;
+	}
+}
+
+
+//程序实现思路： 
+设置一个运算符的栈stack，从左只有扫描中缀表达式
+
+(1) 如果遇到数字，直接放到后缀表达式尾；
+(2) 如果遇到遇到运算符
+a : 若此时栈空，则直接入栈；
+	b : 循环：若栈stack不空且当前运算符优先级小于或等于栈顶运算符的优先级，则将栈顶运算符依次出栈，置于后缀表达式尾；
+	c : 若栈stack不空且当前运算符优先级大于栈顶运算符优先级，则将此运算符直接入栈；
+	d : 若当前运算符为’(‘直接入栈.
+		e:若当前运算符为’)’则将栈顶元素出栈置于后缀表达式尾, 直到遇到运算符’(‘, 注意’(’ 与 ‘)’不用置于后缀表达式尾;
+
+反复执行(1), (2), 直到整个中缀表达式扫描完毕, 若此时栈stack不为空, 则将栈顶运算符依次出栈置于后缀表达式尾.
+
+此时就可以实现将中缀表达式转换成后缀表达式.
+
+如何根据中缀表达式来计算表示式的值 ?
+http ://blog.csdn.net/geekcoder/article/details/6829386
