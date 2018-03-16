@@ -43,4 +43,8 @@ public:
 	afx_msg void OnClickedButton10();
 	afx_msg void OnCmdRange(UINT uID);
 	CString m_EditResult;
+	afx_msg void OnClickedButtonadd();
+	afx_msg void OnClickedButtonmin();
+	afx_msg void OnClickedButtonmult();
+	afx_msg void OnClickedButtondiv();
 };

@@ -43,6 +43,10 @@ BEGIN_MESSAGE_MAP(CMFCApplication4Dlg, CDialogEx)
 	//ON_BN_CLICKED(IDC_BUTTON8, &CMFCApplication4Dlg::OnClickedButton8)
 	//ON_BN_CLICKED(IDC_BUTTON9, &CMFCApplication4Dlg::OnClickedButton9)
 	//ON_BN_CLICKED(IDC_BUTTON10, &CMFCApplication4Dlg::OnClickedButton10)
+	ON_BN_CLICKED(IDC_BUTTON12, &CMFCApplication4Dlg::OnClickedButtonadd)
+	ON_BN_CLICKED(IDC_BUTTON13, &CMFCApplication4Dlg::OnClickedButtonmin)
+	ON_BN_CLICKED(IDC_BUTTON14, &CMFCApplication4Dlg::OnClickedButtonmult)
+	ON_BN_CLICKED(IDC_BUTTON15, &CMFCApplication4Dlg::OnClickedButtondiv)
 END_MESSAGE_MAP()
 
 
@@ -187,5 +191,41 @@ void CMFCApplication4Dlg::OnCmdRange(UINT uID) {
 		m_EditResult.Format(L"%s%d", m_EditResult, uID - IDC_BUTTON1 + 1);
 	}
 	//m_EditResult += L"8";
+	UpdateData(FALSE);
+}
+
+
+void CMFCApplication4Dlg::OnClickedButtonadd()
+{
+	UpdateData(TRUE);
+	// TODO: 在此添加控件通知处理程序代码
+	m_EditResult += L"+";
+	UpdateData(FALSE);
+}
+
+
+void CMFCApplication4Dlg::OnClickedButtonmin()
+{
+	UpdateData(TRUE);
+	// TODO: 在此添加控件通知处理程序代码
+	m_EditResult += L"-";
+	UpdateData(FALSE);
+}
+
+
+void CMFCApplication4Dlg::OnClickedButtonmult()
+{
+	UpdateData(TRUE);
+	// TODO: 在此添加控件通知处理程序代码
+	m_EditResult += L"*";
+	UpdateData(FALSE);
+}
+
+
+void CMFCApplication4Dlg::OnClickedButtondiv()
+{
+	UpdateData(TRUE);
+	// TODO: 在此添加控件通知处理程序代码
+	m_EditResult += L"/";
 	UpdateData(FALSE);
 }
