@@ -54,7 +54,7 @@ public:
 	afx_msg void OnClickedButtonpower();
 	afx_msg void OnClickedButtonequal();
 	bool isKuoHaoPiPei(CString m_EditResult);//判断括号是否匹配
-	bool centerValueLast(string &m_EditResult);//中缀转后缀
+	string centerValueLast(string &m_EditResult);//中缀转后缀
 	static int denghao1;
 	bool isOperator(char a);//判断是否是运算符
 	int priority(char op);//判断优先级别

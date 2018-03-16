@@ -309,7 +309,8 @@ void CMFCApplication4Dlg::OnClickedButtonequal()
 	if (i ==0)
 		m_EditResult = L"括号不匹配，表达式错误";
 	else {
-		string s = CT2A(m_EditResult);
+		tring s = CT2A(m_EditResult);
+		centerValueLast(s);
 	}
 	UpdateData(FALSE);
 	denghao1 = 1;
@@ -348,27 +349,54 @@ bool CMFCApplication4Dlg::isKuoHaoPiPei(CString m_EditResult)
 	return judge;
 }
 
-bool CMFCApplication4Dlg::centerValueLast(string & s)
+string CMFCApplication4Dlg::centerValueLast(string & s)
 {
 	int i = 0, j = 0;
+	string s1 = s + s;
 	stack<char> S;
 	if (!S.empty())
 		S.swap(stack<char>());
 	int l = s.length();
-	for(i = 0,j=0;i < l;i++) {
+	for (i = 0, j = 0;i < l;i++) {
 		if (s[i] >= '0'&&s[i] <= '9' || s[i] == '.') {
-			s[j] = s[i];
+			s1[j] = s[i];
 			j++;
 		}
 		else if (isOperator(s[i])) {
 			if (S.empty())
 				S.push(s[i]);
-			else if (priority(S.top()) {
-
+			else if (priority(S.top()) >= priority(s[i])) {
+				while (priority(S.top()) >= priority(s[i])) {
+					s1[j] = S.top();
+					S.pop();
+					j++;
+				}
+			}
+			else if (!S.empty() && (priority(S.top()) < priority(s[i]))) {
+				S.push(s[i]);
+			}
+			else if (s[i] == '(') {
+				S.push(s[i]);
+			}
+			else if (s[i] == ')') {
+				while (S.top() != '(') {
+					s1[j] = S.top();
+					j++;
+					S.pop();
+				}
+				S.pop();//将（也出栈
 			}
 		}
+
 	}
-	return false;
+	if (!S.empty()) {
+		s1[j] = S.top();
+		j++;
+		S.pop();
+	}
+	//	s1[j] = '\0';
+
+	return s1;
 }
 
 bool CMFCApplication4Dlg::isOperator(char a)
@@ -376,7 +404,7 @@ bool CMFCApplication4Dlg::isOperator(char a)
 	if (a == '+' || a == '-' || a == '*' || a == '/')
 		return true;
 	else
-	return false;
+		return false;
 }
 
 int CMFCApplication4Dlg::priority(char op)
@@ -396,21 +424,3 @@ int CMFCApplication4Dlg::priority(char op)
 	}
 }
 
-
-//程序实现思路： 
-设置一个运算符的栈stack，从左只有扫描中缀表达式
-
-(1) 如果遇到数字，直接放到后缀表达式尾；
-(2) 如果遇到遇到运算符
-a : 若此时栈空，则直接入栈；
-	b : 循环：若栈stack不空且当前运算符优先级小于或等于栈顶运算符的优先级，则将栈顶运算符依次出栈，置于后缀表达式尾；
-	c : 若栈stack不空且当前运算符优先级大于栈顶运算符优先级，则将此运算符直接入栈；
-	d : 若当前运算符为’(‘直接入栈.
-		e:若当前运算符为’)’则将栈顶元素出栈置于后缀表达式尾, 直到遇到运算符’(‘, 注意’(’ 与 ‘)’不用置于后缀表达式尾;
-
-反复执行(1), (2), 直到整个中缀表达式扫描完毕, 若此时栈stack不为空, 则将栈顶运算符依次出栈置于后缀表达式尾.
-
-此时就可以实现将中缀表达式转换成后缀表达式.
-
-如何根据中缀表达式来计算表示式的值 ?
-http ://blog.csdn.net/geekcoder/article/details/6829386
